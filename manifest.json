@@ -1,0 +1,45 @@
+{
+    "$schema": "https://statics.teams.microsoft.com/sdk/v1.0/manifest/MicrosoftTeams.schema.json", 
+    "manifestVersion": "1.0",
+    "version": "1.0.0",
+    "id": "%APP_GUID%",
+    "packageName": "com.samples.samplebot",
+    "developer": {
+        "name": "Hugo GENNARO",
+        "websiteUrl": "http://example.com",
+        "privacyUrl": "http://example.com",
+        "termsOfUseUrl": "http://example.com"
+    },
+    "name": {
+        "short": "Simple Alarm Bot"
+    },
+    "description": {
+        "short": "A simple alarm bot",
+        "full": "A simple bot to register and review alarms as an alarm clock would do."
+    },
+    "bots": [
+        {
+            "botId": "%BOT_FRAMEWORK_ID%",
+            "scopes": [ "team" ],
+            "commandLists": [
+                {
+                    "scopes": [ "team" ],
+                    "commands": [
+                        {
+                            "title": "Help",
+                            "description": "Displays this help message"
+                        },
+                        {
+                            "title": "Create",
+                            "description": "Create a new alam"
+                        },
+                        {
+                            "title": "List",
+                            "description": "List all registered alarms"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
