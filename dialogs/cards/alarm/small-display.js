@@ -27,20 +27,12 @@ const displayCard = ({name, prog, created_on, created_by}) => ({
 							{
 								"title": "Set to ring on:",
 								"value": prettifyDate(new Date(prog))
-							},
-							{
-								"title": "Created on:",
-								"value": prettifyDate(new Date(created_on))
-							},
-							{
-								"title": "Created by:",
-								"value": created_by.name
 							}
 						]
 					}
 				]
 			}
-		]
+        ]
 	}
 });
 

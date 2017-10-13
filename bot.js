@@ -1,8 +1,6 @@
 const restify = require('restify');
 const botbuilder = require('botbuilder');
 
-let alarms = [];
-
 // restify server setup
 let server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3987, function(){
@@ -54,31 +52,36 @@ bot.dialog('createAlarm', [
         session.beginDialog('alarm:create');
     },
     (session, args) => {
-        alarms.push(args);
+        if (!session.userData.alarms) {
+            session.userData.alarms = [];
+        }
+        session.userData.alarms.push(args);
         session.endDialog();
     }
 ]).triggerAction({
     matches: /^create/i
-})
+});
 
 bot.dialog("showAlarm", [
     (session, args) => {
         const wordsThatArentShow = args.intent.matched.input.split(' ').slice(-1);
-        const alarmsSize = alarms.length; // avoid recalculating the length of the array on every loop
+        const alarmsSize = session.userData.alarms.length; // avoid recalculating the length of the array on every loop
         let matchingAlarm = null;
-        console.log(wordsThatArentShow);
         for (let i = 0 ; i < alarmsSize ; i++) {
-            if (wordsThatArentShow.includes(alarms[i].name)) {
-                matchingAlarm = alarms[i];
+            if (wordsThatArentShow.includes(session.userData.alarms[i].name)) {
+                matchingAlarm = session.userData.alarms[i];
             }
         }
         session.beginDialog("alarm:show", matchingAlarm);
-    },
-    (session, args) => {
-        console.log("'''''''''''''''''''''''''''''''''''")
-        console.log(args);
-        console.log("'''''''''''''''''''''''''''''''''''")
+        session.endDialog();
     }
 ]).triggerAction({
     matches: /^show/i
+});
+
+bot.dialog("listAlarms", session => {
+    session.beginDialog("alarm:list");
+    session.endDialog();
+}).triggerAction({
+    matches: /^list/i
 });

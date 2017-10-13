@@ -2,6 +2,7 @@ const botbuilder = require('botbuilder');
 // Cards doesn't handle hours in the dates yet so we'll leave it here for now
 // const createAlarmCard = require('./cards/alarm/create');
 const displayAlarmCard = require('./cards/alarm/display');
+const displaySmallAlarmCard = require('./cards/alarm/small-display');
 const prettifyDate = require('../helpers/date-parser');
 
 const lib = new botbuilder.Library('alarm');
@@ -43,6 +44,20 @@ lib.dialog('show', (session, args) => {
     session.endConversation();
 });
 
+lib.dialog('list', session => {
+    if (!session.userData.alarms || session.userData.alarms.length === 0) {
+        session.send("You've never created any alarms");
+    } else {
+        const alarms = session.userData.alarms;
+        const alarmsSize = alarms.length;
+        for (let i = 0 ; i < alarmsSize ; i++) {
+            const alarmCard = displaySmallAlarmCard(alarms[i]);
+            session.send(new botbuilder.Message(session).addAttachment(alarmCard));
+        }
+    }
+    session.endConversation();
+});
+
 lib.dialog('help', session => {
     session.send(`You can type :<br>
         - "Create": to create a new alarm<br>
@@ -50,6 +65,6 @@ lib.dialog('help', session => {
         - "Show": to display an alarm<br>
         - "Help": to display this help message`);
     session.endDialog();
-})
+});
 
 module.exports = lib;
